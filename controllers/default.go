@@ -39,3 +39,16 @@ func GetTopRatedMovies(ctx *context.Context) {
 		ctx.Output.Body(jsonErr)
 	}
 }
+
+func GetUpcomingMovies(ctx *context.Context) {
+	req := httplib.Get("https://api.themoviedb.org/3/movie/upcoming?api_key="+apikey+"&language=en-US&page=1")
+	data, err := req.Bytes()
+	if err == nil {
+		ctx.Output.Body(data)
+	} else {
+		ctx.Output.Status = 500;
+		var error = ErrorDetail{500, "Internal Server Error"}
+		jsonErr, _ := json.Marshal(error);
+		ctx.Output.Body(jsonErr)
+	}
+}
