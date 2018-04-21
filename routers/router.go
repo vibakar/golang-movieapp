@@ -7,4 +7,5 @@ import (
 
 func init() {
     beego.Get("/v1/movie/nowplaying", controllers.GetNowPlayingMovies)
+    beego.Get("/v1/movie/toprated", controllers.GetTopRatedMovies)
 }
