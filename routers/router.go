@@ -9,4 +9,5 @@ func init() {
     beego.Get("/v1/movie/nowplaying", controllers.GetNowPlayingMovies)
     beego.Get("/v1/movie/toprated", controllers.GetTopRatedMovies)
     beego.Get("/v1/movie/upcoming", controllers.GetUpcomingMovies)
+    beego.Get("/v1/movie/search?:movie", controllers.GetSearchedMovies)
 }
