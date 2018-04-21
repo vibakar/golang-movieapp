@@ -7,7 +7,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-var apikey string = beego.AppConfig.String("tmdb_apikey")
+var apikey = beego.AppConfig.String("tmdb_apikey")
 
 type ErrorDetail struct {
 	Status int `json:"status"`
@@ -20,9 +20,9 @@ func GetNowPlayingMovies(ctx *context.Context) {
 	if err == nil {
 		ctx.Output.Body(data)
 	} else {
-		ctx.Output.Status = 500;
+		ctx.Output.Status = 500
 		var error = ErrorDetail{500, "Internal Server Error"}
-		jsonErr, _ := json.Marshal(error);
+		jsonErr, _ := json.Marshal(error)
 		ctx.Output.Body(jsonErr)
 	}
 }
@@ -33,9 +33,9 @@ func GetTopRatedMovies(ctx *context.Context) {
 	if err == nil {
 		ctx.Output.Body(data)
 	} else {
-		ctx.Output.Status = 500;
+		ctx.Output.Status = 500
 		var error = ErrorDetail{500, "Internal Server Error"}
-		jsonErr, _ := json.Marshal(error);
+		jsonErr, _ := json.Marshal(error)
 		ctx.Output.Body(jsonErr)
 	}
 }
@@ -46,15 +46,15 @@ func GetUpcomingMovies(ctx *context.Context) {
 	if err == nil {
 		ctx.Output.Body(data)
 	} else {
-		ctx.Output.Status = 500;
+		ctx.Output.Status = 500
 		var error = ErrorDetail{500, "Internal Server Error"}
-		jsonErr, _ := json.Marshal(error);
+		jsonErr, _ := json.Marshal(error)
 		ctx.Output.Body(jsonErr)
 	}
 }
 
 func GetSearchedMovies(ctx *context.Context) {
-	var movie string;
+	var movie string
 	ctx.Input.Bind(&movie, "movie")
 	req := httplib.Get("https://api.themoviedb.org/3/search/movie?api_key="+apikey+"&language=en-US&query="+movie)
 	data, err := req.Bytes()
@@ -63,7 +63,21 @@ func GetSearchedMovies(ctx *context.Context) {
 	} else {
 		ctx.Output.Status = 500;
 		var error = ErrorDetail{500, "Internal Server Error"}
-		jsonErr, _ := json.Marshal(error);
+		jsonErr, _ := json.Marshal(error)
+		ctx.Output.Body(jsonErr)
+	}
+}
+
+func GetSimilarMovies(ctx *context.Context){
+	var movieId = ctx.Input.Param(":movieId")
+	req := httplib.Get("https://api.themoviedb.org/3/movie/"+movieId+"/similar?api_key="+apikey+"&language=en-US&page=1")
+	data, err := req.Bytes()
+	if err == nil {
+		ctx.Output.Body(data)
+	} else {
+		ctx.Output.Status = 500;
+		var error = ErrorDetail{500, "Internal Server Error"}
+		jsonErr, _ := json.Marshal(error)
 		ctx.Output.Body(jsonErr)
 	}
 }
