@@ -1,15 +1,28 @@
 package controllers
 
 import (
+	"github.com/astaxie/beego/context"
+	"github.com/astaxie/beego/httplib"
+	"encoding/json"
 	"github.com/astaxie/beego"
 )
 
-type MainController struct {
-	beego.Controller
+var apikey string = beego.AppConfig.String("tmdb_apikey")
+
+type ErrorDetail struct {
+	Status int `json:"status"`
+	ErrorMessage string `json:"errorMessage"`
 }
 
-func (c *MainController) Get() {
-	c.Data["Website"] = "beego.me"
-	c.Data["Email"] = "astaxie@gmail.com"
-	c.TplName = "index.tpl"
+func GetNowPlayingMovies(ctx *context.Context) {
+	req := httplib.Get("https://api.themoviedb.org/3/movie/now_playing?api_key="+apikey+"&language=en-US&page=1")
+	data, err := req.Bytes()
+	if err == nil {
+		ctx.Output.Body(data)
+	} else {
+		ctx.Output.Status = 500;
+		var error = ErrorDetail{500, "Internal Server Error"}
+		jsonErr, _ := json.Marshal(error);
+		ctx.Output.Body(jsonErr)
+	}
 }

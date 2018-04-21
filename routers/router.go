@@ -1,10 +1,10 @@
 package routers
 
 import (
-	"github.com/vibakar/movie-webapp/controllers"
+	"github.com/vibakar/golang-movieapp/controllers"
 	"github.com/astaxie/beego"
 )
 
 func init() {
-    beego.Router("/", &controllers.MainController{})
+    beego.Get("/v1/movie/nowplaying", controllers.GetNowPlayingMovies)
 }

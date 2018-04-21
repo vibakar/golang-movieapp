@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "github.com/vibakar/movie-webapp/routers"
+	_ "github.com/vibakar/golang-movieapp/routers"
 	"github.com/astaxie/beego"
 )
 
