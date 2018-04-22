@@ -12,4 +12,6 @@ func init() {
     beego.Get("/v1/movie/search?:movie", controllers.GetSearchedMovies)
     beego.Get("/v1/movie/similar/:movieId", controllers.GetSimilarMovies)
     beego.Post("/v1/users/addmovie", controllers.AddMovie)
+    beego.Get("/v1/users/favmovies", controllers.GetFavMovies)
+    beego.Delete("/v1/users/delmovie/:movieId", controllers.DeleteMovie)
 }
