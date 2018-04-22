@@ -32,7 +32,7 @@ func AddMovie(ctx *context.Context){
 				ctx.Output.Body([]byte(`{"errMsg": "Movie already added to favourites"}`))
 			}
 		} else {
-			ctx.Output.Status = 500
+			ctx.Output.Status = 503
 			ctx.Output.Body([]byte(`{"errMsg": "Failed to add movie to favourites"}`))
 		}
 	} else {
