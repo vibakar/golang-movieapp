@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego/context"
 	"encoding/json"
 	"github.com/vibakar/golang-movieapp/models/database"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type movieData struct {
@@ -101,9 +102,10 @@ func Signup(ctx *context.Context){
 		var signupData signupData
 		reqBody := ctx.Input.RequestBody
 		json.Unmarshal(reqBody, &signupData)
+		hash, _ := bcrypt.GenerateFromPassword([]byte(signupData.Password), bcrypt.MinCost)
 		insert, err := db.Prepare("INSERT INTO user(username, email, password) VALUES(?,?,?)")
 		if err == nil {
-			_, err := insert.Exec(signupData.Username, signupData.Email, signupData.Password)
+			_, err := insert.Exec(signupData.Username, signupData.Email, hash)
 			if err == nil {
 				ctx.Output.Status = 201
 				ctx.Output.Body([]byte(`{"response": "Account created successfully"}`))
@@ -131,7 +133,8 @@ func Login(ctx *context.Context)  {
 		var dbPassword string
 		err := db.QueryRow("SELECT password FROM user WHERE email = ?", loginData.Email).Scan(&dbPassword)
 		if err == nil {
-			if dbPassword == loginData.Password {
+			err := bcrypt.CompareHashAndPassword([]byte(dbPassword), []byte(loginData.Password))
+			if err == nil {
 				ctx.Output.Status = 200
 				ctx.Output.Body([]byte(`{"response": "Login success"}`))
 			} else {
