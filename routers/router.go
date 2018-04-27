@@ -11,7 +11,10 @@ func init() {
     beego.Get("/v1/movie/upcoming", controllers.GetUpcomingMovies)
     beego.Get("/v1/movie/search?:movie", controllers.GetSearchedMovies)
     beego.Get("/v1/movie/similar/:movieId", controllers.GetSimilarMovies)
-    beego.Post("/v1/users/addmovie", controllers.AddMovie)
-    beego.Get("/v1/users/favmovies", controllers.GetFavMovies)
-    beego.Delete("/v1/users/delmovie/:movieId", controllers.DeleteMovie)
+
+    beego.Post("/v1/user/addmovie", controllers.AddMovie)
+    beego.Get("/v1/user/favmovies", controllers.GetFavMovies)
+    beego.Delete("/v1/user/delmovie/:movieId", controllers.DeleteMovie)
+    beego.Post("/v1/user/signup", controllers.Signup)
+    beego.Post("/v1/user/login", controllers.Login)
 }

@@ -14,14 +14,25 @@ type movieData struct {
 	Poster string `json:"poster"`
 }
 
+type signupData struct {
+	Username string
+	Email string
+	Password string
+}
+
+type loginData struct {
+	Email string
+	Password string
+}
+
 func AddMovie(ctx *context.Context){
-	var db, err = database.ConnectDB()
+	db, err := database.ConnectDB()
 	if err == nil {
 		defer db.Close()
 		var movie movieData
 		data := ctx.Input.RequestBody
 		json.Unmarshal(data, &movie)
-		insert, err := db.Prepare("INSERT INTO user(id, title, votes, rating, poster) VALUES(?,?,?,?,?)")
+		insert, err := db.Prepare("INSERT INTO favourites(id, title, votes, rating, poster) VALUES(?,?,?,?,?)")
 		if err == nil {
 			_, err := insert.Exec(movie.Id, movie.Title, movie.Votes, movie.Rating, movie.Poster)
 			if err == nil {
@@ -46,7 +57,7 @@ func GetFavMovies(ctx *context.Context){
 	var moviesList = make([]interface{}, 0)
 	if err == nil {
 		defer db.Close()
-		rows, err := db.Query("SELECT * FROM user")
+		rows, err := db.Query("SELECT * FROM favourites")
 		if err == nil {
 			for rows.Next(){
 				var movie movieData
@@ -69,13 +80,67 @@ func DeleteMovie(ctx *context.Context){
 	db, err := database.ConnectDB()
 	if err == nil {
 		var movieId = ctx.Input.Param(":movieId")
-		del, err := db.Prepare("DELETE FROM user WHERE id=?")
+		del, err := db.Prepare("DELETE FROM favourites WHERE id=?")
 		if err == nil {
 			del.Exec(movieId)
 			ctx.Output.Body([]byte(`{"response": "Movie removed from favourites"}`))
 		} else {
 			ctx.Output.Status = 500
 			ctx.Output.Body([]byte(`{"errMsg": "Failed to remove movie from favourites"}`))
+		}
+	} else {
+		ctx.Output.Status = 503
+		ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+	}
+}
+
+func Signup(ctx *context.Context){
+	db, err := database.ConnectDB()
+	if err == nil {
+		defer db.Close()
+		var signupData signupData
+		reqBody := ctx.Input.RequestBody
+		json.Unmarshal(reqBody, &signupData)
+		insert, err := db.Prepare("INSERT INTO user(username, email, password) VALUES(?,?,?)")
+		if err == nil {
+			_, err := insert.Exec(signupData.Username, signupData.Email, signupData.Password)
+			if err == nil {
+				ctx.Output.Status = 201
+				ctx.Output.Body([]byte(`{"response": "Account created successfully"}`))
+			} else {
+				ctx.Output.Status = 409
+				ctx.Output.Body([]byte(`{"errMsg": "Email already exists"}`))
+			}
+		} else {
+			ctx.Output.Status = 503
+			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+		}
+	} else {
+		ctx.Output.Status = 503
+		ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+	}
+}
+
+func Login(ctx *context.Context)  {
+	db, err := database.ConnectDB()
+	if err == nil {
+		defer db.Close()
+		reqData := ctx.Input.RequestBody
+		var loginData loginData
+		json.Unmarshal(reqData, &loginData)
+		var dbPassword string
+		err := db.QueryRow("SELECT password FROM user WHERE email = ?", loginData.Email).Scan(&dbPassword)
+		if err == nil {
+			if dbPassword == loginData.Password {
+				ctx.Output.Status = 200
+				ctx.Output.Body([]byte(`{"response": "Login success"}`))
+			} else {
+				ctx.Output.Status = 401
+				ctx.Output.Body([]byte(`{"errMsg": "Email or Password incorrect"}`))
+			}
+		} else {
+			ctx.Output.Status = 503
+			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
 		}
 	} else {
 		ctx.Output.Status = 503
