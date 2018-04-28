@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego/httplib"
 	"encoding/json"
 	"github.com/astaxie/beego"
+	"net/url"
 )
 
 var apikey = beego.AppConfig.String("tmdb_apikey")
@@ -62,7 +63,8 @@ func GetUpcomingMovies(ctx *context.Context) {
 func GetSearchedMovies(ctx *context.Context) {
 	var movie string
 	ctx.Input.Bind(&movie, "movie")
-	req := httplib.Get("https://api.themoviedb.org/3/search/movie?api_key="+apikey+"&language=en-US&query="+movie)
+	beego.Info("searched movie name", movie)
+	req := httplib.Get("https://api.themoviedb.org/3/search/movie?api_key="+apikey+"&language=en-US&query="+url.QueryEscape(movie))
 	data, err := req.Bytes()
 	if err == nil {
 		beego.Info("Successfully fetched serached movies from TMDB")

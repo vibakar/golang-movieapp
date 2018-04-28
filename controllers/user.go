@@ -10,8 +10,10 @@ import (
 )
 
 type movieData struct {
-	Id int `json:"id"`
+	id int
+	email string
 	Title string `json:"title"`
+	MovieId int `json:"id"`
 	Votes int `json:"votes"`
 	Rating float64 `json:"rating"`
 	Poster string `json:"poster"`
@@ -34,81 +36,102 @@ type username struct {
 var sessionDB = map[string]string{}
 
 func AddMovie(ctx *context.Context){
-	db, err := database.ConnectDB()
-	if err == nil {
-		defer db.Close()
-		var movie movieData
-		data := ctx.Input.RequestBody
-		json.Unmarshal(data, &movie)
-		insert, err := db.Prepare("INSERT INTO favourites(id, title, votes, rating, poster) VALUES(?,?,?,?,?)")
+	cookie := ctx.GetCookie("U_SESSION_ID")
+	if email, exists := sessionDB[cookie]; exists {
+		db, err := database.ConnectDB()
 		if err == nil {
-			_, err := insert.Exec(movie.Id, movie.Title, movie.Votes, movie.Rating, movie.Poster)
+			defer db.Close()
+			var movie movieData
+			data := ctx.Input.RequestBody
+			json.Unmarshal(data, &movie)
+			insert, err := db.Prepare("INSERT INTO favourites(email, movieId, title, votes, rating, poster) VALUES(?,?,?,?,?,?)")
 			if err == nil {
-				beego.Info("Moive added to fav succeess")
-				ctx.Output.Status = 201
-				ctx.Output.Body([]byte(`{"response": "Movie added to favourites"}`))
+				_, err := insert.Exec(email, movie.MovieId, movie.Title, movie.Votes, movie.Rating, movie.Poster)
+				if err == nil {
+					beego.Info("Movie added to fav success")
+					ctx.Output.Status = 201
+					ctx.Output.Body([]byte(`{"response": "Movie added to favourites"}`))
+				} else {
+					beego.Info("Add movie to fav fails, because movie already exists")
+					ctx.Output.Status = 409
+					ctx.Output.Body([]byte(`{"errMsg": "Movie already added to favourites"}`))
+				}
 			} else {
-				beego.Info("Add movie to fav fails, because movie already exists")
-				ctx.Output.Status = 409
-				ctx.Output.Body([]byte(`{"errMsg": "Movie already added to favourites"}`))
+				beego.Error("Add movie to fav query failed")
+				ctx.Output.Status = 503
+				ctx.Output.Body([]byte(`{"errMsg": "Failed to add movie to favourites"}`))
 			}
 		} else {
-			beego.Error("Add movie to fav query failed")
-			ctx.Output.Status = 503
-			ctx.Output.Body([]byte(`{"errMsg": "Failed to add movie to favourites"}`))
-		}
-	} else {
-		beego.Error("DB connection failed during add movies to fav")
-		ctx.Output.Status = 503
-		ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
-	}
-}
-
-func GetFavMovies(ctx *context.Context){
-	db, err := database.ConnectDB();
-	var moviesList = make([]interface{}, 0)
-	if err == nil {
-		defer db.Close()
-		rows, err := db.Query("SELECT * FROM favourites")
-		if err == nil {
-			for rows.Next(){
-				var movie movieData
-				rows.Scan(&movie.Id, &movie.Title, &movie.Votes, &movie.Rating, &movie.Poster)
-				moviesList = append(moviesList, movie)
-			}
-			beego.Info("favourite movie fetched successfully", moviesList)
-			var response, _ = json.Marshal(moviesList)
-			ctx.Output.Body(response)
-		} else {
-			beego.Error("Get fav movie query fails")
+			beego.Error("DB connection failed during add movies to fav")
 			ctx.Output.Status = 503
 			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
 		}
 	} else {
-		beego.Error("DB connection failed during get favourite movies")
-		ctx.Output.Status = 503
-		ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+		beego.Error("Tried to add movie to fav without login")
+		ctx.Output.Status = 403
+		ctx.Output.Body([]byte(`{"errMsg": "Please login first"}`))
+	}
+}
+
+func GetFavMovies(ctx *context.Context){
+	cookie := ctx.GetCookie("U_SESSION_ID")
+	if email, exists := sessionDB[cookie]; exists {
+		db, err := database.ConnectDB()
+		var moviesList = make([]interface{}, 0)
+		if err == nil {
+			defer db.Close()
+			rows, err := db.Query("SELECT * FROM favourites WHERE email = ?", email)
+			if err == nil {
+				for rows.Next(){
+					var movie movieData
+					rows.Scan(&movie.id, &movie.email, &movie.MovieId, &movie.Title, &movie.Votes, &movie.Rating, &movie.Poster)
+					moviesList = append(moviesList, movie)
+				}
+				beego.Info("favourite movie fetched successfully", moviesList)
+				var response, _ = json.Marshal(moviesList)
+				ctx.Output.Body(response)
+			} else {
+				beego.Error("Get fav movie query fails")
+				ctx.Output.Status = 503
+				ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+			}
+		} else {
+			beego.Error("DB connection failed during get favourite movies")
+			ctx.Output.Status = 503
+			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+		}
+	} else {
+		beego.Error("Tried to get fav movies without login")
+		ctx.Output.Status = 403
+		ctx.Output.Body([]byte(`{"errMsg": "Access Forbidden"}`))
 	}
 }
 
 func DeleteMovie(ctx *context.Context){
-	db, err := database.ConnectDB()
-	if err == nil {
-		var movieId = ctx.Input.Param(":movieId")
-		del, err := db.Prepare("DELETE FROM favourites WHERE id=?")
+	cookie := ctx.GetCookie("U_SESSION_ID")
+	if email, exists := sessionDB[cookie]; exists {
+		db, err := database.ConnectDB()
 		if err == nil {
-			del.Exec(movieId)
-			beego.Info("Removing movie from favourites success")
-			ctx.Output.Body([]byte(`{"response": "Movie removed from favourites"}`))
+			var movieId = ctx.Input.Param(":movieId")
+			del, err := db.Prepare("DELETE FROM favourites WHERE movieId=? AND email=?")
+			if err == nil {
+				del.Exec(movieId, email)
+				beego.Info("Removing movie from favourites success")
+				ctx.Output.Body([]byte(`{"response": "Movie removed from favourites"}`))
+			} else {
+				beego.Error("Delete favourite movie query fails")
+				ctx.Output.Status = 500
+				ctx.Output.Body([]byte(`{"errMsg": "Failed to remove movie from favourites"}`))
+			}
 		} else {
-			beego.Error("Delete favourite movie query fails")
-			ctx.Output.Status = 500
-			ctx.Output.Body([]byte(`{"errMsg": "Failed to remove movie from favourites"}`))
+			beego.Error("DB connection failed during delete movie from favourites")
+			ctx.Output.Status = 503
+			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
 		}
 	} else {
-		beego.Error("DB connection failed during delete movie from favourites")
-		ctx.Output.Status = 503
-		ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+		beego.Error("Tried to delete fav movies without login")
+		ctx.Output.Status = 403
+		ctx.Output.Body([]byte(`{"errMsg": "Access Forbidden"}`))
 	}
 }
 
