@@ -69,7 +69,7 @@ func AddMovie(ctx *context.Context){
 	} else {
 		beego.Error("Tried to add movie to fav without login")
 		ctx.Output.Status = 403
-		ctx.Output.Body([]byte(`{"errMsg": "Please login first"}`))
+		ctx.Output.Body([]byte(`{"errMsg": "Please login first", "code": 403}`))
 	}
 }
 
@@ -93,17 +93,17 @@ func GetFavMovies(ctx *context.Context){
 			} else {
 				beego.Error("Get fav movie query fails")
 				ctx.Output.Status = 503
-				ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+				ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
 			}
 		} else {
 			beego.Error("DB connection failed during get favourite movies")
 			ctx.Output.Status = 503
-			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
 		}
 	} else {
 		beego.Error("Tried to get fav movies without login")
 		ctx.Output.Status = 403
-		ctx.Output.Body([]byte(`{"errMsg": "Access Forbidden"}`))
+		ctx.Output.Body([]byte(`{"errMsg": "Access Forbidden", "code": 403}`))
 	}
 }
 
@@ -121,17 +121,17 @@ func DeleteMovie(ctx *context.Context){
 			} else {
 				beego.Error("Delete favourite movie query fails")
 				ctx.Output.Status = 500
-				ctx.Output.Body([]byte(`{"errMsg": "Failed to remove movie from favourites"}`))
+				ctx.Output.Body([]byte(`{"errMsg": "Failed to remove movie from favourites", "code": 500}`))
 			}
 		} else {
 			beego.Error("DB connection failed during delete movie from favourites")
 			ctx.Output.Status = 503
-			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
 		}
 	} else {
 		beego.Error("Tried to delete fav movies without login")
 		ctx.Output.Status = 403
-		ctx.Output.Body([]byte(`{"errMsg": "Access Forbidden"}`))
+		ctx.Output.Body([]byte(`{"errMsg": "Access Forbidden", "code": 403}`))
 	}
 }
 
@@ -152,21 +152,21 @@ func Signup(ctx *context.Context){
 				sessionDB[uid.String()] = signupData.Email
 				beego.Info("User signup success with email ", signupData.Email)
 				ctx.Output.Status = 201
-				ctx.Output.Body([]byte(`{"response": "Account created successfully"}`))
+				ctx.Output.Body([]byte(`{"response": "Account created successfully", "code": 201}`))
 			} else {
 				beego.Warn("user signup failed because of using already available email", signupData.Email)
 				ctx.Output.Status = 409
-				ctx.Output.Body([]byte(`{"errMsg": "Email already exists"}`))
+				ctx.Output.Body([]byte(`{"errMsg": "Email already exists", "code": 409}`))
 			}
 		} else {
 			beego.Error("user signup query fails")
 			ctx.Output.Status = 503
-			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
 		}
 	} else {
 		beego.Error("DB connection failed during user signup")
 		ctx.Output.Status = 503
-		ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+		ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
 	}
 }
 
@@ -191,17 +191,17 @@ func Login(ctx *context.Context)  {
 			} else {
 				beego.Error("User login failed", loginData.Email)
 				ctx.Output.Status = 401
-				ctx.Output.Body([]byte(`{"errMsg": "Email or Password incorrect"}`))
+				ctx.Output.Body([]byte(`{"errMsg": "Email or Password incorrect", "code": 401}`))
 			}
 		} else {
 			beego.Error("User login query failed")
 			ctx.Output.Status = 503
-			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
 		}
 	} else {
 		beego.Error("DB connection failed in user login")
 		ctx.Output.Status = 503
-		ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+		ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
 	}
 }
 
@@ -230,21 +230,21 @@ func GetUsername(ctx *context.Context){
 				} else {
 					beego.Error("Username not found for the received cookie")
 					ctx.Output.Status = 503
-					ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+					ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
 				}
 			} else {
 				beego.Error("DB connection failed while getting username")
 				ctx.Output.Status = 503
-				ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later"}`))
+				ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
 			}
 		} else {
 			beego.Error("No email found for the received cookie")
 			ctx.Output.Status = 401
-			ctx.Output.Body([]byte(`{"errMsg": "Unauthorised user"}`))
+			ctx.Output.Body([]byte(`{"errMsg": "Unauthorised user", "code": 401}`))
 		}
 	} else {
 		beego.Error("No cookie recieved to get username")
 		ctx.Output.Status = 401
-		ctx.Output.Body([]byte(`{"errMsg": "Unauthorised user"}`))
+		ctx.Output.Body([]byte(`{"errMsg": "Unauthorised user", "code": 401}`))
 	}
 }

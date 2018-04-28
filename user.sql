@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2018 at 06:48 PM
+-- Generation Time: Apr 28, 2018 at 02:12 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.4
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `moviesdb`
+-- Database: `movieapp`
 --
 
 -- --------------------------------------------------------
@@ -29,19 +29,17 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `user` (
-  `id` int(50) NOT NULL,
-  `title` varchar(50) NOT NULL,
-  `votes` int(50) NOT NULL,
-  `rating` double NOT NULL,
-  `poster` varchar(100) NOT NULL
+  `email` varchar(50) NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `password` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `title`, `votes`, `rating`, `poster`) VALUES
-(354912, 'Coco', 3999, 7.8, '/eKi8dIrr8voobbaGzDpe8w0PVbC.jpg');
+INSERT INTO `user` (`email`, `username`, `password`) VALUES
+('virat@gmail.com', 'virat', '$2a$04$CxKbM5X.yXYju9NViRX4COZE8kNfV/BglGJi5bCMxi36556h0gLWe');
 
 --
 -- Indexes for dumped tables
@@ -51,7 +49,7 @@ INSERT INTO `user` (`id`, `title`, `votes`, `rating`, `poster`) VALUES
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`email`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

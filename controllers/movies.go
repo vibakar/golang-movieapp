@@ -3,17 +3,11 @@ package controllers
 import (
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/httplib"
-	"encoding/json"
 	"github.com/astaxie/beego"
 	"net/url"
 )
 
 var apikey = beego.AppConfig.String("tmdb_apikey")
-
-type ErrorDetail struct {
-	Status int `json:"status"`
-	ErrorMessage string `json:"errorMessage"`
-}
 
 func GetNowPlayingMovies(ctx *context.Context) {
 	req := httplib.Get("https://api.themoviedb.org/3/movie/now_playing?api_key="+apikey+"&language=en-US&page=1")
@@ -24,9 +18,7 @@ func GetNowPlayingMovies(ctx *context.Context) {
 	} else {
 		beego.Error("Failed to fetch Now playing movies from TMDB")
 		ctx.Output.Status = 500
-		var error = ErrorDetail{500, "Internal Server Error"}
-		jsonErr, _ := json.Marshal(error)
-		ctx.Output.Body(jsonErr)
+		ctx.Output.Body([]byte(`{"errMsg": "Internal Server Error", "code": 500}`))
 	}
 }
 
@@ -39,9 +31,7 @@ func GetTopRatedMovies(ctx *context.Context) {
 	} else {
 		beego.Error("Failed to fetch Top Rated movies from TMDB")
 		ctx.Output.Status = 500
-		var error = ErrorDetail{500, "Internal Server Error"}
-		jsonErr, _ := json.Marshal(error)
-		ctx.Output.Body(jsonErr)
+		ctx.Output.Body([]byte(`{"errMsg": "Internal Server Error", "code": 500}`))
 	}
 }
 
@@ -54,9 +44,7 @@ func GetUpcomingMovies(ctx *context.Context) {
 	} else {
 		beego.Error("Failed to fetch upcoming movies from TMDB")
 		ctx.Output.Status = 500
-		var error = ErrorDetail{500, "Internal Server Error"}
-		jsonErr, _ := json.Marshal(error)
-		ctx.Output.Body(jsonErr)
+		ctx.Output.Body([]byte(`{"errMsg": "Internal Server Error", "code": 500}`))
 	}
 }
 
@@ -72,9 +60,7 @@ func GetSearchedMovies(ctx *context.Context) {
 	} else {
 		beego.Error("Failed to get searched movies from TMDB")
 		ctx.Output.Status = 500;
-		var error = ErrorDetail{500, "Internal Server Error"}
-		jsonErr, _ := json.Marshal(error)
-		ctx.Output.Body(jsonErr)
+		ctx.Output.Body([]byte(`{"errMsg": "Internal Server Error", "code": 500}`))
 	}
 }
 
@@ -88,8 +74,6 @@ func GetSimilarMovies(ctx *context.Context){
 	} else {
 		beego.Error("Failed to get similar movies from TMDB")
 		ctx.Output.Status = 500;
-		var error = ErrorDetail{500, "Internal Server Error"}
-		jsonErr, _ := json.Marshal(error)
-		ctx.Output.Body(jsonErr)
+		ctx.Output.Body([]byte(`{"errMsg": "Internal Server Error", "code": 500}`))
 	}
 }

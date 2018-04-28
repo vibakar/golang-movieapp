@@ -1216,3 +1216,90 @@
 2018/04/28 17:05:53.017 [I] [movies.go:22] Now playing movies successfully fetched from TMDB 
 2018/04/28 17:05:53.018 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:05:51] "GET /v1/movie/nowplaying HTTP/1.1 200 0" 1.303432 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
 
+2018/04/28 17:10:28.640 [I] [movies.go:22] Now playing movies successfully fetched from TMDB 
+2018/04/28 17:10:28.641 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:10:27] "GET /v1/movie/nowplaying HTTP/1.1 200 0" 1.101458 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:10:28.657 [I] [movies.go:37] Top Rated movies successfully fetched from TMDB 
+2018/04/28 17:10:28.658 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:10:27] "GET /v1/movie/toprated HTTP/1.1 200 0" 1.117463 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:10:28.675 [I] [movies.go:52] Upcoming movies successfully fetched from TMDB 
+2018/04/28 17:10:28.676 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:10:27] "GET /v1/movie/upcoming HTTP/1.1 200 0" 1.135476 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:12:54.200 [I] [movies.go:52] Upcoming movies successfully fetched from TMDB 
+2018/04/28 17:12:54.200 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:12:53] "GET /v1/movie/upcoming HTTP/1.1 200 0" 1.086773 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:12:54.290 [I] [movies.go:22] Now playing movies successfully fetched from TMDB 
+2018/04/28 17:12:54.296 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:12:53] "GET /v1/movie/nowplaying HTTP/1.1 200 0" 1.185840 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:12:54.441 [I] [movies.go:37] Top Rated movies successfully fetched from TMDB 
+2018/04/28 17:12:54.448 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:12:53] "GET /v1/movie/toprated HTTP/1.1 200 0" 1.335951 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:13:04.424 [I] [movies.go:52] Upcoming movies successfully fetched from TMDB 
+2018/04/28 17:13:04.426 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:13:02] "GET /v1/movie/upcoming HTTP/1.1 200 0" 2.032446 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:13:04.492 [I] [movies.go:22] Now playing movies successfully fetched from TMDB 
+2018/04/28 17:13:04.496 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:13:02] "GET /v1/movie/nowplaying HTTP/1.1 200 0" 2.108501 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:13:04.561 [I] [movies.go:37] Top Rated movies successfully fetched from TMDB 
+2018/04/28 17:13:04.564 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:13:02] "GET /v1/movie/toprated HTTP/1.1 200 0" 2.170548 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:14:57.378 [I] [user.go:188] User logged in successfully with Email viba@gmail.com 
+2018/04/28 17:14:57.378 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:14:57] "POST /v1/user/login HTTP/1.1 200 0" 0.002981 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:15:00.045 [I] [user.go:226] username found for the received cookie 
+2018/04/28 17:15:00.046 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:15:00] "GET /v1/user/username HTTP/1.1 200 0" 0.002001 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:15:00.587 [I] [user.go:90] favourite movie fetched successfully [{427648 viba@gmail.com Avengers: Infinity War 299536 836 9 /7WsyChQLEftFiDOVTGkv3hFpyyt.jpg} {427652 viba@gmail.com Sachein 63641 6 5 /a9RoE0gCxxcHt50qfYqkqJh43A1.jpg} {427656 viba@gmail.com Peter Rabbit 381719 145 6 /2yjSvEDuM3rLDng40erLsWkQRfn.jpg}] 
+2018/04/28 17:15:00.588 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:15:00] "GET /v1/user/favmovies HTTP/1.1 200 0" 0.003002 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:15:01.851 [I] [movies.go:52] Upcoming movies successfully fetched from TMDB 
+2018/04/28 17:15:01.851 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:15:00] "GET /v1/movie/upcoming HTTP/1.1 200 0" 1.161865 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:15:01.894 [I] [movies.go:22] Now playing movies successfully fetched from TMDB 
+2018/04/28 17:15:01.895 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:15:00] "GET /v1/movie/nowplaying HTTP/1.1 200 0" 1.207886 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:15:01.906 [I] [movies.go:37] Top Rated movies successfully fetched from TMDB 
+2018/04/28 17:15:01.906 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:15:00] "GET /v1/movie/toprated HTTP/1.1 200 0" 1.216905 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:15:08.816 [I] [user.go:90] favourite movie fetched successfully [{427648 viba@gmail.com Avengers: Infinity War 299536 836 9 /7WsyChQLEftFiDOVTGkv3hFpyyt.jpg} {427652 viba@gmail.com Sachein 63641 6 5 /a9RoE0gCxxcHt50qfYqkqJh43A1.jpg} {427656 viba@gmail.com Peter Rabbit 381719 145 6 /2yjSvEDuM3rLDng40erLsWkQRfn.jpg}] 
+2018/04/28 17:15:08.817 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:15:08] "GET /v1/user/favmovies HTTP/1.1 200 0" 0.002005 http://localhost:4200/favourites Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:15:13.194 [I] [user.go:90] favourite movie fetched successfully [{427648 viba@gmail.com Avengers: Infinity War 299536 836 9 /7WsyChQLEftFiDOVTGkv3hFpyyt.jpg} {427652 viba@gmail.com Sachein 63641 6 5 /a9RoE0gCxxcHt50qfYqkqJh43A1.jpg} {427656 viba@gmail.com Peter Rabbit 381719 145 6 /2yjSvEDuM3rLDng40erLsWkQRfn.jpg}] 
+2018/04/28 17:15:13.195 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:15:13] "GET /v1/user/favmovies HTTP/1.1 200 0" 0.002000 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:15:14.699 [I] [movies.go:37] Top Rated movies successfully fetched from TMDB 
+2018/04/28 17:15:14.701 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:15:13] "GET /v1/movie/toprated HTTP/1.1 200 0" 1.197785 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:15:14.789 [I] [movies.go:52] Upcoming movies successfully fetched from TMDB 
+2018/04/28 17:15:14.793 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:15:13] "GET /v1/movie/upcoming HTTP/1.1 200 0" 1.286059 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:15:14.812 [I] [movies.go:22] Now playing movies successfully fetched from TMDB 
+2018/04/28 17:15:14.814 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:15:13] "GET /v1/movie/nowplaying HTTP/1.1 200 0" 1.373303 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:15:37.086 [E] [user.go:104] Tried to get fav movies without login 
+2018/04/28 17:15:37.086 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:15:37] "GET /v1/user/favmovies HTTP/1.1 403 0" 0.001000 http://localhost:4200/favourites Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:19:54.156 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 17:21:42.686 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 17:23:44.525 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 17:29:39.578 [E] [user.go:241] No email found for the received cookie 
+2018/04/28 17:29:39.579 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:29:39] "GET /v1/user/username HTTP/1.1 401 0" 0.001000 http://localhost:4200/favourites Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:29:40.071 [E] [user.go:104] Tried to get fav movies without login 
+2018/04/28 17:29:40.072 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:29:40] "GET /v1/user/favmovies HTTP/1.1 403 0" 0.001001 http://localhost:4200/favourites Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:29:57.881 [E] [user.go:241] No email found for the received cookie 
+2018/04/28 17:29:57.881 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:29:57] "GET /v1/user/username HTTP/1.1 401 0" 0.000000 http://localhost:4200/favourites Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:29:58.354 [E] [user.go:104] Tried to get fav movies without login 
+2018/04/28 17:29:58.355 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:29:58] "GET /v1/user/favmovies HTTP/1.1 403 0" 0.001001 http://localhost:4200/favourites Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:30:24.391 [I] [user.go:211] User logged out and session cleared  d644d1f5-4fe6-4dcc-aff4-cc12af10248f12345 
+2018/04/28 17:30:24.391 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:30:24] "GET /v1/user/logout HTTP/1.1 200 0" 0.000000 http://localhost:4200/favourites Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:30:28.422 [I] [movies.go:42] Upcoming movies successfully fetched from TMDB 
+2018/04/28 17:30:28.423 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:30:24] "GET /v1/movie/upcoming HTTP/1.1 200 0" 3.687622 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 17:30:28.538 [I] [movies.go:16] Now playing movies successfully fetched from TMDB 
+2018/04/28 17:30:28.539 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 05:30:24] "GET /v1/movie/nowplaying HTTP/1.1 200 0" 3.808709 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+

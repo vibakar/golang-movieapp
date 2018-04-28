@@ -1,2 +1,2 @@
 golang-movieapp.exe
-logs/app.log
+./logs/app.log
