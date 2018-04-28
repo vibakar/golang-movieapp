@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	beego.SetLogger("file", `{"filename":"logs/app.log"}`)
 	beego.Run()
 }
 

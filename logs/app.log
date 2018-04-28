@@ -1,0 +1,43 @@
+2018/04/28 12:22:59.917 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:25:48.215 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:27:30.749 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:28:16.556 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:29:45.683 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:29:51.311 [I] [user.go:174] User logged out and session cleared  54480933-3170-4691-8303-882814e68def 
+2018/04/28 12:29:51.312 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 12:29:51] "GET /v1/user/logout HTTP/1.1 200 0" 0.001002 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 12:30:12.612 [E] [user.go:155] User login failed 
+2018/04/28 12:30:12.612 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 12:30:12] "POST /v1/user/login HTTP/1.1 401 0" 0.057318 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 12:30:59.576 [E] [user.go:160] User login query failed 
+2018/04/28 12:30:59.576 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 12:30:58] "POST /v1/user/login HTTP/1.1 503 0" 1.001043 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 12:31:58.938 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:32:33.818 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:35:52.518 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:41:09.927 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:43:23.398 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:45:08.659 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:45:18.105 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:47:19.665 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:49:47.315 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:50:50.567 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:52:31.469 [I] [asm_amd64.s:2361] http server Running on http://:8080
+2018/04/28 12:53:09.856 [I] [user.go:165] User logged in successfully with Email viba@gmail.com 
+2018/04/28 12:53:09.856 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 12:53:09] "POST /v1/user/login HTTP/1.1 200 0" 0.007006 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 12:53:12.529 [I] [user.go:203] username found for the received cookie 
+2018/04/28 12:53:12.529 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 12:53:12] "GET /v1/user/username HTTP/1.1 200 0" 0.001999 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 12:53:13.008 [I] [user.go:79] favourite movie fetched successfully [{9800 Philadelphia 1381 8 /4Y4cwVV6qd6fwhlVfRHUXELEbpr.jpg} {19404 Dilwale Dulhania Le Jayenge 1375 9 /uC6TTUhPpQCmgldGyYveKRAu8JN.jpg} {63647 Ghilli 17 7 /whTH3XU2uBt40nNpyGhxjh7XNKJ.jpg} {84329 Robot & Frank 532 7 /euOI0iOczBCEQgPhToZcvQ2eIj7.jpg} {148284 Enthiran 57 7 /6VcROd4zbaleTGIkgRlNCdw8o94.jpg} {354912 Coco 4071 8 /eKi8dIrr8voobbaGzDpe8w0PVbC.jpg}] 
+2018/04/28 12:53:13.009 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 12:53:13] "GET /v1/user/favmovies HTTP/1.1 200 0" 0.003002 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 12:53:17.029 [I] [movies.go:51] Upcoming movies successfully fetched from TMDB 
+2018/04/28 12:53:17.029 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 12:53:13] "GET /v1/movie/upcoming HTTP/1.1 200 0" 3.915415 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 12:53:18.906 [I] [movies.go:36] Top Rated movies successfully fetched from TMDB 
+2018/04/28 12:53:18.906 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 12:53:13] "GET /v1/movie/toprated HTTP/1.1 200 0" 5.792265 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
+2018/04/28 12:53:20.700 [I] [movies.go:21] Now playing movies successfully fetched from TMDB 
+2018/04/28 12:53:20.701 [D] [server.go:2694] 127.0.0.1 - - [28/Apr/2018 12:53:13] "GET /v1/movie/nowplaying HTTP/1.1 200 0" 7.592737 http://localhost:4200/ Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+
