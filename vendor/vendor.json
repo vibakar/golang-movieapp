@@ -1,5 +1,8 @@
 {
 	"comment": "",
+	"heroku": {
+		"goVersion": "go1.10"
+	},
 	"ignore": "test",
 	"package": [
 		{
@@ -33,6 +36,12 @@
 		{
 			"checksumSHA1": "zNVoeKrYcNNex6/K/4sts8XIL5A=",
 			"path": "github.com/astaxie/beego/grace",
+			"revision": "f16688817aa428d10361394015b40d096b680542",
+			"revisionTime": "2017-12-18T11:18:59Z"
+		},
+		{
+			"checksumSHA1": "dLEUUXo/Jht9TllkLn8SmtdJeyQ=",
+			"path": "github.com/astaxie/beego/httplib",
 			"revision": "f16688817aa428d10361394015b40d096b680542",
 			"revisionTime": "2017-12-18T11:18:59Z"
 		},
@@ -73,14 +82,23 @@
 			"revisionTime": "2018-01-03T17:44:51Z"
 		},
 		{
+			"checksumSHA1": "oCH3J96RWvO8W4xjix47PModpio=",
+			"path": "golang.org/x/crypto/bcrypt",
+			"revision": "b49d69b5da943f7ef3c9cf91c8777c1f78a0cc3c",
+			"revisionTime": "2018-04-25T14:55:48Z"
+		},
+		{
+			"checksumSHA1": "oVPHWesOmZ02vLq2fglGvf+AMgk=",
+			"path": "golang.org/x/crypto/blowfish",
+			"revision": "b49d69b5da943f7ef3c9cf91c8777c1f78a0cc3c",
+			"revisionTime": "2018-04-25T14:55:48Z"
+		},
+		{
 			"checksumSHA1": "W/pYxFe8/FHT10/wulwesJsOoUw=",
 			"path": "google.golang.org/appengine/cloudsql",
 			"revision": "962cbd1200af94a5a35ba8d512e9f91271b4d01a",
 			"revisionTime": "2018-04-27T17:34:10Z"
 		}
 	],
-	"heroku": {
-		"goVersion": "go1.10"
-	},
 	"rootPath": "github.com/vibakar/golang-movieapp"
 }
