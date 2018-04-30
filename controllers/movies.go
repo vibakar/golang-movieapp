@@ -7,7 +7,7 @@ import (
 	"net/url"
 )
 
-var apikey = beego.AppConfig.String("tmdb_apikey")
+var apikey = beego.AppConfig.String("TMDBApiKey")
 
 func GetNowPlayingMovies(ctx *context.Context) {
 	req := httplib.Get("https://api.themoviedb.org/3/movie/now_playing?api_key="+apikey+"&language=en-US&page=1")

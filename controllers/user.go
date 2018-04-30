@@ -3,10 +3,11 @@ package controllers
 import (
 	"github.com/astaxie/beego/context"
 	"encoding/json"
-	"github.com/vibakar/golang-movieapp/models/database"
+	"github.com/vibakar/golang-movieapp/models/dbConnection"
 	"golang.org/x/crypto/bcrypt"
 	"github.com/satori/go.uuid"
 	"github.com/astaxie/beego"
+	"github.com/vibakar/golang-movieapp/models/etcd"
 )
 
 type movieData struct {
@@ -33,12 +34,13 @@ type loginData struct {
 type username struct {
 	Username string `json:"username"`
 }
-var sessionDB = map[string]string{}
 
 func AddMovie(ctx *context.Context){
 	cookie := ctx.GetCookie("U_SESSION_ID")
-	if email, exists := sessionDB[cookie]; exists {
-		db, err := database.ConnectDB()
+	resp, err := etcd.Get(cookie)
+	if err == nil {
+		email := resp.Node.Value
+		db, err := dbConnection.ConnectToMysql()
 		if err == nil {
 			defer db.Close()
 			var movie movieData
@@ -75,8 +77,10 @@ func AddMovie(ctx *context.Context){
 
 func GetFavMovies(ctx *context.Context){
 	cookie := ctx.GetCookie("U_SESSION_ID")
-	if email, exists := sessionDB[cookie]; exists {
-		db, err := database.ConnectDB()
+	resp, err := etcd.Get(cookie)
+	if err == nil {
+		email := resp.Node.Value
+		db, err := dbConnection.ConnectToMysql()
 		var moviesList = make([]interface{}, 0)
 		if err == nil {
 			defer db.Close()
@@ -109,8 +113,10 @@ func GetFavMovies(ctx *context.Context){
 
 func DeleteMovie(ctx *context.Context){
 	cookie := ctx.GetCookie("U_SESSION_ID")
-	if email, exists := sessionDB[cookie]; exists {
-		db, err := database.ConnectDB()
+	resp, err := etcd.Get(cookie)
+	if err == nil {
+		email := resp.Node.Value
+		db, err := dbConnection.ConnectToMysql()
 		if err == nil {
 			var movieId = ctx.Input.Param(":movieId")
 			del, err := db.Prepare("DELETE FROM favourites WHERE movieId=? AND email=?")
@@ -135,8 +141,8 @@ func DeleteMovie(ctx *context.Context){
 	}
 }
 
-func Signup(ctx *context.Context){
-	db, err := database.ConnectDB()
+func SignUp(ctx *context.Context){
+	db, err := dbConnection.ConnectToMysql()
 	if err == nil {
 		defer db.Close()
 		var signupData signupData
@@ -149,10 +155,16 @@ func Signup(ctx *context.Context){
 			if err == nil {
 				uid, _ := uuid.NewV4()
 				ctx.SetCookie("U_SESSION_ID", uid.String())
-				sessionDB[uid.String()] = signupData.Email
-				beego.Info("User signup success with email ", signupData.Email)
-				ctx.Output.Status = 201
-				ctx.Output.Body([]byte(`{"response": "Account created successfully", "code": 201}`))
+				_, err := etcd.Set(uid.String(), signupData.Email)
+				if err == nil {
+					beego.Info("User signup success with email ", signupData.Email)
+					ctx.Output.Status = 201
+					ctx.Output.Body([]byte(`{"response": "Account created successfully", "code": 201}`))
+				} else {
+					beego.Error("Failed to set key in ETCD during signup")
+					ctx.Output.Status = 503
+					ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
+				}
 			} else {
 				beego.Warn("user signup failed because of using already available email", signupData.Email)
 				ctx.Output.Status = 409
@@ -171,7 +183,7 @@ func Signup(ctx *context.Context){
 }
 
 func Login(ctx *context.Context)  {
-	db, err := database.ConnectDB()
+	db, err := dbConnection.ConnectToMysql()
 	if err == nil {
 		defer db.Close()
 		reqData := ctx.Input.RequestBody
@@ -184,10 +196,16 @@ func Login(ctx *context.Context)  {
 			if err == nil {
 				uid, _ := uuid.NewV4()
 				ctx.SetCookie("U_SESSION_ID", uid.String())
-				sessionDB[uid.String()] = loginData.Email
-				beego.Info("User logged in successfully with Email", loginData.Email)
-				ctx.Output.Status = 200
-				ctx.Output.Body([]byte(`{"response": "Login success"}`))
+				_, err := etcd.Set(uid.String(), loginData.Email)
+				if err == nil {
+					beego.Info("User logged in successfully with Email", loginData.Email)
+					ctx.Output.Status = 200
+					ctx.Output.Body([]byte(`{"response": "Login success"}`))
+				} else {
+					beego.Error("Failed to set key to ETCD during login")
+					ctx.Output.Status = 503
+					ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
+				}
 			} else {
 				beego.Error("User login failed", loginData.Email)
 				ctx.Output.Status = 401
@@ -206,45 +224,46 @@ func Login(ctx *context.Context)  {
 }
 
 func Logout(ctx *context.Context){
-	uid := ctx.GetCookie("U_SESSION_ID")
-	delete(sessionDB, uid)
-	beego.Info("User logged out and session cleared ", uid)
-	ctx.Output.Body([]byte(`{"response":"Logged out successfully"}`))
+	cookie := ctx.GetCookie("U_SESSION_ID")
+	_, err := etcd.Delete(cookie)
+	if err == nil {
+		beego.Info("User logged out and session cleared ", cookie)
+		ctx.Output.Body([]byte(`{"response":"Logged out successfully"}`))
+	} else {
+		beego.Error("Failed to delete key in ETCD during logout")
+		ctx.Output.Status = 503
+		ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
+	}
 }
 
 func GetUsername(ctx *context.Context){
-	uid := ctx.GetCookie("U_SESSION_ID")
-	if len(uid) > 0 {
-		email := sessionDB[uid]
-		if len(email) > 0 {
-			db, err := database.ConnectDB()
-			defer db.Close()
-			var user username
+	cookie := ctx.GetCookie("U_SESSION_ID")
+	resp, err := etcd.Get(cookie)
+	if err == nil {
+		email := resp.Node.Value
+		db, err := dbConnection.ConnectToMysql()
+		defer db.Close()
+		var user username
+		if err == nil {
+			err := db.QueryRow("SELECT username FROM user WHERE email = ?", email).Scan(&user.Username)
 			if err == nil {
-				err := db.QueryRow("SELECT username FROM user WHERE email = ?", email).Scan(&user.Username)
-				if err == nil {
-					beego.Info("username found for the received cookie")
-					ctx.Output.Status = 200
-					res,_ := json.Marshal(user)
-					ctx.Output.Body(res)
-				} else {
-					beego.Error("Username not found for the received cookie")
-					ctx.Output.Status = 503
-					ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
-				}
+				beego.Info("username found for the received cookie")
+				ctx.Output.Status = 200
+				res,_ := json.Marshal(user)
+				ctx.Output.Body(res)
 			} else {
-				beego.Error("DB connection failed while getting username")
+				beego.Error("Username not found for the received cookie")
 				ctx.Output.Status = 503
 				ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
 			}
 		} else {
-			beego.Error("No email found for the received cookie")
-			ctx.Output.Status = 401
-			ctx.Output.Body([]byte(`{"errMsg": "Unauthorised user", "code": 401}`))
+			beego.Error("DB connection failed while getting username")
+			ctx.Output.Status = 503
+			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
 		}
 	} else {
-		beego.Error("No cookie recieved to get username")
-		ctx.Output.Status = 401
+		beego.Error("No user found")
+		ctx.Output.Status = 403
 		ctx.Output.Body([]byte(`{"errMsg": "Unauthorised user", "code": 401}`))
 	}
 }

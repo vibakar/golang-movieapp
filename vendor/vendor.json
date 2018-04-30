@@ -70,6 +70,10 @@
 			"revisionTime": "2017-12-18T11:18:59Z"
 		},
 		{
+			"path": "github.com/coreos/etcd/client",
+			"revision": ""
+		},
+		{
 			"checksumSHA1": "8j2neB9bQ6paBj6F68+qaujMRl8=",
 			"path": "github.com/go-sql-driver/mysql",
 			"revision": "3287d94d4c6a48a63e16fffaabf27ab20203af2a",
