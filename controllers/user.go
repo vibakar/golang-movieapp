@@ -35,6 +35,8 @@ type username struct {
 	Username string `json:"username"`
 }
 
+var cookieMaxAge, _ = beego.AppConfig.Int("cookieMaxAge")
+
 func AddMovie(ctx *context.Context){
 	cookie := ctx.GetCookie("U_SESSION_ID")
 	resp, err := etcd.Get(cookie)
@@ -154,7 +156,7 @@ func SignUp(ctx *context.Context){
 			_, err := insert.Exec(signupData.Username, signupData.Email, hash)
 			if err == nil {
 				uid, _ := uuid.NewV4()
-				ctx.SetCookie("U_SESSION_ID", uid.String())
+				ctx.SetCookie("U_SESSION_ID", uid.String(), cookieMaxAge)
 				_, err := etcd.Set(uid.String(), signupData.Email)
 				if err == nil {
 					beego.Info("User signup success with email ", signupData.Email)
@@ -195,7 +197,7 @@ func Login(ctx *context.Context)  {
 			err := bcrypt.CompareHashAndPassword([]byte(dbPassword), []byte(loginData.Password))
 			if err == nil {
 				uid, _ := uuid.NewV4()
-				ctx.SetCookie("U_SESSION_ID", uid.String())
+				ctx.SetCookie("U_SESSION_ID", uid.String(), cookieMaxAge)
 				_, err := etcd.Set(uid.String(), loginData.Email)
 				if err == nil {
 					beego.Info("User logged in successfully with Email", loginData.Email)
