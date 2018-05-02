@@ -8,6 +8,8 @@ import (
 	"github.com/satori/go.uuid"
 	"github.com/astaxie/beego"
 	"github.com/vibakar/golang-movieapp/models/etcd"
+	"github.com/vibakar/golang-movieapp/models/mail"
+	"fmt"
 )
 
 type movieData struct {
@@ -33,6 +35,10 @@ type loginData struct {
 
 type username struct {
 	Username string `json:"username"`
+}
+
+type VerificationCode struct {
+	Code float64
 }
 
 var cookieMaxAge, _ = beego.AppConfig.Int("cookieMaxAge")
@@ -150,15 +156,17 @@ func SignUp(ctx *context.Context){
 		var signupData signupData
 		reqBody := ctx.Input.RequestBody
 		json.Unmarshal(reqBody, &signupData)
+		generatedCode := mail.GenerateRandNo(6)
 		hash, _ := bcrypt.GenerateFromPassword([]byte(signupData.Password), bcrypt.MinCost)
-		insert, err := db.Prepare("INSERT INTO user(username, email, password) VALUES(?,?,?)")
+		insert, err := db.Prepare("INSERT INTO user(username, email, password, code, verified) VALUES(?,?,?,?,?)")
 		if err == nil {
-			_, err := insert.Exec(signupData.Username, signupData.Email, hash)
+			_, err := insert.Exec(signupData.Username, signupData.Email, hash, generatedCode, 0)
 			if err == nil {
 				uid, _ := uuid.NewV4()
 				ctx.SetCookie("U_SESSION_ID", uid.String(), cookieMaxAge)
 				_, err := etcd.Set(uid.String(), signupData.Email)
 				if err == nil {
+					mail.SendMail(signupData.Email, generatedCode)
 					beego.Info("User signup success with email ", signupData.Email)
 					ctx.Output.Status = 201
 					ctx.Output.Body([]byte(`{"response": "Account created successfully", "code": 201}`))
@@ -192,7 +200,8 @@ func Login(ctx *context.Context)  {
 		var loginData loginData
 		json.Unmarshal(reqData, &loginData)
 		var dbPassword string
-		err := db.QueryRow("SELECT password FROM user WHERE email = ?", loginData.Email).Scan(&dbPassword)
+		var verified int
+		err := db.QueryRow("SELECT password, verified FROM user WHERE email = ?", loginData.Email).Scan(&dbPassword, &verified)
 		if err == nil {
 			err := bcrypt.CompareHashAndPassword([]byte(dbPassword), []byte(loginData.Password))
 			if err == nil {
@@ -200,9 +209,15 @@ func Login(ctx *context.Context)  {
 				ctx.SetCookie("U_SESSION_ID", uid.String(), cookieMaxAge)
 				_, err := etcd.Set(uid.String(), loginData.Email)
 				if err == nil {
-					beego.Info("User logged in successfully with Email", loginData.Email)
-					ctx.Output.Status = 200
-					ctx.Output.Body([]byte(`{"response": "Login success"}`))
+					if verified == 1 {
+						beego.Info("User logged in successfully with Email", loginData.Email)
+						ctx.Output.Status = 200
+						ctx.Output.Body([]byte(`{"response": "Login success"}`))
+					} else {
+						beego.Error("User tried to login without verifying password", loginData.Email)
+						ctx.Output.Status = 403
+						ctx.Output.Body([]byte(`{"errMsg": "Email is not verified yet!", "code": 403}`))
+					}
 				} else {
 					beego.Error("Failed to set key to ETCD during login")
 					ctx.Output.Status = 503
@@ -267,5 +282,56 @@ func GetUsername(ctx *context.Context){
 		beego.Error("No user found")
 		ctx.Output.Status = 403
 		ctx.Output.Body([]byte(`{"errMsg": "Unauthorised user", "code": 401}`))
+	}
+}
+
+func VerifyEmail(ctx *context.Context){
+	cookie := ctx.GetCookie("U_SESSION_ID")
+	resp, err := etcd.Get(cookie)
+	if err == nil {
+		email := resp.Node.Value
+		var code VerificationCode
+		data := ctx.Input.RequestBody
+		json.Unmarshal(data, &code)
+		var userCode float64 = code.Code
+		fmt.Printf("%T", code.Code)
+		var dbCode float64
+		db, err := dbConnection.ConnectToMysql()
+		if err == nil {
+			defer db.Close()
+			err := db.QueryRow("SELECT code FROM user WHERE email = ?", email).Scan(&dbCode)
+			if err == nil {
+				if userCode == dbCode {
+					update, err := db.Prepare("UPDATE user SET verified = ? WHERE email = ?")
+					if err == nil{
+						update.Exec(1, email)
+						beego.Error("Email verified successfully", email)
+						ctx.Output.Status = 201
+						ctx.Output.Body([]byte(`{"errMsg": "Email verified successfully", "code": 200}`))
+					} else {
+						beego.Error("failed to update verified to 1 during email verification", email)
+						ctx.Output.Status = 500
+						ctx.Output.Body([]byte(`{"errMsg": "Internal server error", "code": 500}`))
+					}
+				} else {
+					fmt.Println(userCode, dbCode)
+					beego.Error("Entered verification code is not matched with the code in db", email)
+					ctx.Output.Status = 403
+					ctx.Output.Body([]byte(`{"errMsg": "Entered wrong verification code", "code": 403}`))
+				}
+			} else {
+				beego.Error("Failed to get verification code from db for the user", email)
+				ctx.Output.Status = 503
+				ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
+			}
+		} else {
+			beego.Error("DB connection Failed while getting verification code from db")
+			ctx.Output.Status = 503
+			ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
+		}
+	} else {
+		beego.Error("Failed to get user email from ETCD during Email verification")
+		ctx.Output.Status = 503
+		ctx.Output.Body([]byte(`{"errMsg": "Service Unavailable, Try Later", "code": 503}`))
 	}
 }

@@ -19,4 +19,5 @@ func init() {
     beego.Get("/v1/user/favmovies", controllers.GetFavMovies)
     beego.Delete("/v1/user/delmovie/:movieId", controllers.DeleteMovie)
     beego.Get("/v1/user/username", controllers.GetUsername)
+    beego.Post("/v1/user/verifyEmail", controllers.VerifyEmail)
 }

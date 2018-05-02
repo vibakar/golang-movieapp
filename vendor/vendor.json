@@ -102,6 +102,18 @@
 			"path": "google.golang.org/appengine/cloudsql",
 			"revision": "962cbd1200af94a5a35ba8d512e9f91271b4d01a",
 			"revisionTime": "2018-04-27T17:34:10Z"
+		},
+		{
+			"checksumSHA1": "L0i3W5A4DlPYT648m6tewQZElvk=",
+			"path": "gopkg.in/alexcesaro/quotedprintable.v3",
+			"revision": "2caba252f4dc53eaf6b553000885530023f54623",
+			"revisionTime": "2015-07-16T17:19:45Z"
+		},
+		{
+			"checksumSHA1": "Q24+t5ryUvt5JJPtPKim1q8hwmI=",
+			"path": "gopkg.in/gomail.v2",
+			"revision": "81ebce5c23dfd25c6c67194b37d3dd3f338c98b1",
+			"revisionTime": "2016-04-11T21:29:32Z"
 		}
 	],
 	"rootPath": "github.com/vibakar/golang-movieapp"
