@@ -13,16 +13,16 @@ var table = [...]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9'}
 
 func SendMail(email string, code float64){
 	m := gomail.NewMessage()
-	m.SetHeader("From", "")
+	m.SetHeader("From", "vibakar23@gmail.com")
 	m.SetHeader("To", email)
 	m.SetHeader("Subject", "Email verification!")
 	m.SetBody("text/html", `<p>Hai!!</p>
                             <p>Kindly use this verification code to verify your email <strong>`+strconv.FormatFloat(code, 'f', 0, 64)+`</strong></p>`)
 
-	d := gomail.NewDialer("smtp.gmail.com", 587, "", "")
+	d := gomail.NewDialer("smtp.gmail.com", 587, "vibakar23@gmail.com", "vibakar2394")
 
 	if err := d.DialAndSend(m); err != nil {
-		beego.Error("-------------------------- Email not sent to the user --------------------------", email)
+		beego.Error("-------------------------- Email not sent to the user --------------------------", email, err)
 	} else {
 		fmt.Println("Mail sent successfully to the user", email, code)
 	}
@@ -38,7 +38,6 @@ func GenerateRandNo(max int) float64 {
 		b[i] = table[int(b[i])%len(table)]
 	}
 	randNo := string(b)
-	fmt.Println(randNo, b)
 	s, err := strconv.ParseFloat(randNo, 64)
 	if err == nil {
 		beego.Info("Random no generated successfully")
