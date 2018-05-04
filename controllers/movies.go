@@ -9,7 +9,7 @@ import (
 )
 
 var apikey = beego.AppConfig.String("TMDBApiKey")
-var reqTimeOut = 10 * time.Second
+var reqTimeOut = 30 * time.Second
 
 func GetNowPlayingMovies(ctx *context.Context) {
 	req := httplib.Get("https://api.themoviedb.org/3/movie/now_playing?api_key="+apikey+"&language=en-US&page=1").SetTimeout(reqTimeOut, 30 * time.Second)

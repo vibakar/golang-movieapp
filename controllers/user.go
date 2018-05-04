@@ -318,7 +318,7 @@ func VerifyEmail(ctx *context.Context){
 						ctx.SetCookie("U_SESSION_ID", uid.String(), cookieMaxAge)
 						_, err := etcd.Set(uid.String(), email)
 						if err == nil {
-							beego.Error("Email verified successfully", email)
+							beego.Info("Email verified successfully", email)
 							ctx.Output.Status = 201
 							ctx.Output.Body([]byte(`{"errMsg": "Email verified successfully", "code": 201}`))
 						} else {
@@ -366,7 +366,7 @@ func ResendCode(ctx *context.Context){
 			mail.SendMail(email, generatedCode)
 			if err == nil {
 				update.Exec(generatedCode, email)
-				beego.Error("Verification code sent successfully")
+				beego.Info("Verification code sent successfully")
 				ctx.Output.Status = 200
 				ctx.Output.Body([]byte(`{"response": "Verification code sent", "code": 200}`))
 			}

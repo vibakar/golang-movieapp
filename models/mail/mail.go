@@ -10,16 +10,19 @@ import (
 )
 
 var table = [...]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9'}
+var fromEmail = beego.AppConfig.String("fromEmail")
+var configEmail = beego.AppConfig.String("configEmail")
+var configEmailPwd = beego.AppConfig.String("configEmailPwd")
 
 func SendMail(email string, code float64){
 	m := gomail.NewMessage()
-	m.SetHeader("From", "vibakar23@gmail.com")
+	m.SetHeader("From", fromEmail)
 	m.SetHeader("To", email)
 	m.SetHeader("Subject", "Email verification!")
 	m.SetBody("text/html", `<p>Hai!!</p>
                             <p>Kindly use this verification code to verify your email <strong>`+strconv.FormatFloat(code, 'f', 0, 64)+`</strong></p>`)
 
-	d := gomail.NewDialer("smtp.gmail.com", 587, "vibakar23@gmail.com", "vibakar2394")
+	d := gomail.NewDialer("smtp.gmail.com", 587, configEmail, configEmailPwd)
 
 	if err := d.DialAndSend(m); err != nil {
 		beego.Error("-------------------------- Email not sent to the user --------------------------", email, err)
