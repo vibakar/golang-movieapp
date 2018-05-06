@@ -66,8 +66,23 @@ func GetSearchedMovies(ctx *context.Context) {
 	}
 }
 
+func GetMovieDetail(ctx *context.Context) {
+	movieId := ctx.Input.Param(":movieId")
+	beego.Info("Received movie Id", movieId)
+	req := httplib.Get("https://api.themoviedb.org/3/movie/"+movieId+"?api_key="+apikey+"&language=en-US").SetTimeout(reqTimeOut, 30 * time.Second)
+	data, err := req.Bytes()
+	if err == nil {
+		beego.Info("Successfully fetched movie detail from TMDB")
+		ctx.Output.Body(data)
+	} else {
+		beego.Error("Failed to get movies detail from TMDB", movieId)
+		ctx.Output.Status = 500
+		ctx.Output.Body([]byte(`{"errMsg": "Internal Server Error", "code": 500}`))
+	}
+}
+
 func GetSimilarMovies(ctx *context.Context){
-	var movieId = ctx.Input.Param(":movieId")
+	movieId := ctx.Input.Param(":movieId")
 	req := httplib.Get("https://api.themoviedb.org/3/movie/"+movieId+"/similar?api_key="+apikey+"&language=en-US&page=1").SetTimeout(reqTimeOut, 30 * time.Second)
 	data, err := req.Bytes()
 	if err == nil {
